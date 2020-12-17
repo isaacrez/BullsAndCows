@@ -11,4 +11,32 @@ package com.mycompany.bullsandcows.models;
  */
 public class Game {
     
+    private int id;
+    private boolean finished;
+    private String answer;
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+    
+    public boolean isFinished() {
+        return this.finished;
+    }
+    
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+    
+    public String getAnswer() {
+        return this.answer;
+    }
+    
 }
