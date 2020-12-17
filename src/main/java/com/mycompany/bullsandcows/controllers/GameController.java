@@ -8,9 +8,13 @@ package com.mycompany.bullsandcows.controllers;
 import com.mycompany.bullsandcows.data.GameDao;
 import com.mycompany.bullsandcows.data.RoundDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.EntityResponse;
 
 /**
  *
@@ -30,11 +34,25 @@ public class GameController {
         this.gameDao = gameDao;
         this.roundDao = roundDao;
     }
+        
+    @PostMapping("/begin")
+    public ResponseEntity newGame() {
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
     
-    @GetMapping
-    public String[] sample() {
-        String[] result = {"Hello", "World", "!"};
-        return result;
+    @PostMapping("/guess")
+    public ResponseEntity makeGuess() {
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity getGameById() {
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    
+    @GetMapping("/rounds/{gameId}")
+    public ResponseEntity getRoundsByGameId() {
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     
 }
