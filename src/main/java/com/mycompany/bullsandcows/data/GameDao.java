@@ -10,6 +10,6 @@ package com.mycompany.bullsandcows.data;
  *
  * @author isaacrez
  */
-public class GameDao {
+public interface GameDao {
     
 }

@@ -9,6 +9,6 @@ package com.mycompany.bullsandcows.data;
  *
  * @author isaacrez
  */
-public class RoundDao {
+public interface RoundDao {
     
 }
