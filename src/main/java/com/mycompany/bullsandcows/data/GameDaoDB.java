@@ -36,16 +36,36 @@ public class GameDaoDB implements GameDao {
     }
 
     @Override
-    public List<Round> getAssociatedRounds(int gameId) throws SQLException {
-    // ToDo: Replace with proper sql aggregation
-        String GET_ALL_ROUNDS_FOR_GAME = "SELECT r.id, r.gameId, r.guess, r.result, r.time " +
-                "FROM round AS r " +
-                "INNER JOIN game AS g " +
-                "ON g.id = r.gameId " +
-                "WHERE g.id = ?";
-        return jdbc.query(GET_ALL_ROUNDS_FOR_GAME, new RoundMapper(), gameId);
-    }
+    @Transactional
+    public Game addGame() {
+        Game game = new Game();
+        game.setAnswer(generateAnswer());
+        game.setFinished(false);
 
+        String INSERT_NEW_GAME = "INSERT INTO game (finished, answer) " +
+                "VALUES(?, ?);";
+        
+        jdbc.update(INSERT_NEW_GAME, game.isFinished(), game.getAnswer());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        game.setId(newId);
+        return game;
+    }
+    
+    private String generateAnswer() {
+        List<Integer> numbers = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            numbers.add(i);
+        }
+        Collections.shuffle(numbers);
+
+        String ansString = "";
+        for(int i = 0; i < 4; i++){
+            ansString += numbers.get(i).toString();
+        }
+        
+        return ansString;
+    }
+    
     @Override
     public List<Game> getAllGames() {
         String GET_ALL_GAMES = "SELECT * FROM game";
@@ -79,36 +99,15 @@ public class GameDaoDB implements GameDao {
         }
         return updatedGames;
     }
-
-    @Override
-    @Transactional
-    public Game addGame() {
-        Game game = new Game();
-        game.setAnswer(generateAnswer());
-        game.setFinished(false);
-
-        String INSERT_NEW_GAME = "INSERT INTO game (finished, answer) " +
-                "VALUES(?, ?);";
-        
-        jdbc.update(INSERT_NEW_GAME, game.isFinished(), game.getAnswer());
-        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        game.setId(newId);
-        return game;
-    }
     
-    private String generateAnswer() {
-        List<Integer> numbers = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
-            numbers.add(i);
-        }
-        Collections.shuffle(numbers);
-
-        String ansString = "";
-        for(int i = 0; i < 4; i++){
-            ansString += numbers.get(i).toString();
-        }
-        
-        return ansString;
+    @Override
+    public List<Round> getAssociatedRounds(int gameId) throws SQLException {
+        String GET_ALL_ROUNDS_FOR_GAME = "SELECT r.id, r.gameId, r.guess, r.result, r.time " +
+                "FROM round AS r " +
+                "INNER JOIN game AS g " +
+                "ON g.id = r.gameId " +
+                "WHERE g.id = ?";
+        return jdbc.query(GET_ALL_ROUNDS_FOR_GAME, new RoundMapper(), gameId);
     }
 
     @Override
