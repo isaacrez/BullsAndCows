@@ -76,7 +76,8 @@ public class Round {
         } else if ((o instanceof Round)) {
             Round round = (Round) o;
             if ((id == round.getId())
-                    && (gameId == round.getGameId())) {
+                    && (gameId == round.getGameId())
+                    && (guess.equals(round.getGuess()))) {
                 return true;
             }
         }
