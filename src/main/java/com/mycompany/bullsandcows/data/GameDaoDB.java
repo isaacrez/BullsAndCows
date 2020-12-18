@@ -56,7 +56,19 @@ public class GameDaoDB implements GameDao {
         String GET_GAME_BY_ID = "SELECT * " +
                 "FROM game " +
                 "WHERE id = ?";
-        return jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
+        
+        Game game = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
+        return hideAnswerIfUnfinished(game);
+    }
+    
+    private Game hideAnswerIfUnfinished(Game game) {
+        if (game == null) {
+            return null;
+        } else if (!game.isFinished()) {
+            game.setAnswer("****");
+        }
+        
+        return game;
     }
 
     @Override
