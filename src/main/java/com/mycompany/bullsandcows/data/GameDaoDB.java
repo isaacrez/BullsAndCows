@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,21 +38,22 @@ public class GameDaoDB implements GameDao {
     public int totalGuesses(int gameId) throws SQLException {
 //        ToDo: Replace with proper sql aggregation
         String GET_NUMBER_OF_GUESSES = "SELECT * " +
-                "FROM Game g " +
-                "INNER JOIN Round r" +
-                "ON g.GameId = r.GameId AND g.id = ?;";
+                "FROM game g " +
+                "INNER JOIN round r" +
+                "ON g.gameId = r.gameId AND g.id = ?;";
         return jdbc.query(GET_NUMBER_OF_GUESSES, new GameMapper(), gameId).size();
     }
 
     @Override
+    @Transactional
     public String getResult(int roundId) throws SQLException {
         int e = 0;
         int p = 0;
         String GET_GUESS = "SELECT * " +
-                "FROM Round" +
+                "FROM round" +
                 "WHERE id = ?";
         String GET_ANSWER = "SELECT * " +
-                "FROM Game " +
+                "FROM game " +
                 "WHERE id = ?";
         Round round = jdbc.queryForObject(GET_GUESS, new RoundDaoDB.RoundMapper(), roundId);
         Game game = jdbc.queryForObject(GET_ANSWER, new GameMapper(), round.getGameId());
@@ -73,7 +75,7 @@ public class GameDaoDB implements GameDao {
     public List<Game> getAllGames() {
         String GET_ALL_GAMES = "SELECT * " +
                 "FROM game";
-        return jdbc.query(GET_ALL_GAMES);
+        return jdbc.query(GET_ALL_GAMES, new GameMapper());
     }
 
     @Override
@@ -81,13 +83,23 @@ public class GameDaoDB implements GameDao {
         String GET_GAME_BY_ID = "SELECT * " +
                 "FROM game " +
                 "WHERE id = ?";
-        return jdbc.query(GET_GAME_BY_ID, id);
+        return jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
     }
 
     @Override
+    @Transactional
     public Game addGame(Game game) {
-        String INSERT_NEW_GAME = "INSERT INTO Game (finished, answer) " +
-                "Values(?, ?);";
+        String INSERT_NEW_GAME = "INSERT INTO game (finished, answer) " +
+                "VALUES(?, ?);";
+        
+        game.setAnswer(generateAnswer());
+        jdbc.update(INSERT_NEW_GAME, false, game.getAnswer());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        game.setId(newId);
+        return game;
+    }
+    
+    private String generateAnswer() {
         List<Integer> numbers = new ArrayList<>();
         for(int i = 0; i < 10; i++){
             numbers.add(i);
@@ -98,12 +110,13 @@ public class GameDaoDB implements GameDao {
         for(int i = 0; i < 4; i++){
             ansString += numbers.get(i).toString();
         }
-        jdbc.update(INSERT_NEW_GAME, false, ansString);
+        
+        return ansString;
     }
 
     @Override
     public void updateGame(Game game) {
-        String UPDATE_GAME_TO_FINISHED = "UPDATE Game " +
+        String UPDATE_GAME_TO_FINISHED = "UPDATE game " +
                 "SET finished = true " +
                 "WHERE id = ?; ";
         jdbc.update(UPDATE_GAME_TO_FINISHED, game.getId());
@@ -111,8 +124,8 @@ public class GameDaoDB implements GameDao {
 
     @Override
     public void deleteGameById(int id) {
-        String DELETE_GAME = "DELETE FROM Game g " +
-                "INNER JOIN Round r " +
+        String DELETE_GAME = "DELETE FROM game g " +
+                "INNER JOIN round r " +
                 "ON g.id = r.gameId " +
                 "WHERE g.id = ?; ";
         jdbc.update(DELETE_GAME, id);
