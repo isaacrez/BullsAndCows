@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mycompany.bullsandcows.models.Round;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author isaacrez
+ * @author srsagehorn
  */
 @Repository
 public class GameDaoDB implements GameDao {
@@ -68,27 +71,51 @@ public class GameDaoDB implements GameDao {
 
     @Override
     public List<Game> getAllGames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String GET_ALL_GAMES = "SELECT * " +
+                "FROM game";
+        return jdbc.query(GET_ALL_GAMES);
     }
 
     @Override
     public Game getGameById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String GET_GAME_BY_ID = "SELECT * " +
+                "FROM game " +
+                "WHERE id = ?";
+        return jdbc.query(GET_GAME_BY_ID, id);
     }
 
     @Override
     public Game addGame(Game game) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String INSERT_NEW_GAME = "INSERT INTO Game (finished, answer) " +
+                "Values(?, ?);";
+        List<Integer> numbers = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            numbers.add(i);
+        }
+        Collections.shuffle(numbers);
+
+        String ansString = "";
+        for(int i = 0; i < 4; i++){
+            ansString += numbers.get(i).toString();
+        }
+        jdbc.update(INSERT_NEW_GAME, false, ansString);
     }
 
     @Override
     public void updateGame(Game game) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String UPDATE_GAME_TO_FINISHED = "UPDATE Game " +
+                "SET finished = true " +
+                "WHERE id = ?; ";
+        jdbc.update(UPDATE_GAME_TO_FINISHED, game.getId());
     }
 
     @Override
     public void deleteGameById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String DELETE_GAME = "DELETE FROM Game g " +
+                "INNER JOIN Round r " +
+                "ON g.id = r.gameId " +
+                "WHERE g.id = ?; ";
+        jdbc.update(DELETE_GAME, id);
     }
  
     private static final class GameMapper implements RowMapper<Game> {
