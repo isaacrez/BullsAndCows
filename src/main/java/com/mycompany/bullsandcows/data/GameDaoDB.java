@@ -45,33 +45,6 @@ public class GameDaoDB implements GameDao {
     }
 
     @Override
-    @Transactional
-    public String getResult(int roundId) throws SQLException {
-        int e = 0;
-        int p = 0;
-        String GET_GUESS = "SELECT * " +
-                "FROM round" +
-                "WHERE id = ?";
-        String GET_ANSWER = "SELECT * " +
-                "FROM game " +
-                "WHERE id = ?";
-        Round round = jdbc.queryForObject(GET_GUESS, new RoundDaoDB.RoundMapper(), roundId);
-        Game game = jdbc.queryForObject(GET_ANSWER, new GameMapper(), round.getGameId());
-
-        String answer = game.getAnswer();
-        String guess = round.getGuess();
-
-        for (int i = 0; i < GET_ANSWER.length(); i++) {
-            if (answer.charAt(i) == guess.charAt(i)) {
-                e++;
-            } else if (answer.contains(guess.substring(i,i))) {
-                p++;
-            }
-        }
-        return "e:" + e + ":p:" + p;
-    }
-
-    @Override
     public List<Game> getAllGames() {
         String GET_ALL_GAMES = "SELECT * " +
                 "FROM game";

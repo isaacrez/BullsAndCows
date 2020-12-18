@@ -22,5 +22,4 @@ public interface GameDao {
     void deleteGameById(int id);
     
     public int totalGuesses(int gameId) throws SQLException;
-    public String getResult(int roundId) throws SQLException;
 }
