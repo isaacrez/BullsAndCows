@@ -6,6 +6,9 @@
 package com.mycompany.bullsandcows.data;
 
 import com.mycompany.bullsandcows.TestApplicationConfiguration;
+import com.mycompany.bullsandcows.models.Game;
+import com.mycompany.bullsandcows.models.Round;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,10 +46,49 @@ public class GameDaoDBTest {
     
     @Before
     public void setUp() {
+        List<Round> rounds = roundDao.getAllRounds();
+        for (Round round : rounds) {
+            roundDao.deleteRoundById(round.getId());
+        }
+        
+        List<Game> games = gameDao.getAllGames();
+        for (Game game : games) {
+            gameDao.deleteGameById(game.getId());
+        }
     }
     
     @After
     public void tearDown() {
+    }
+    
+    @Test
+    public void testAddGetGame() {
+        
+    }
+    
+    @Test
+    public void testGetAllGames() {
+        
+    }
+    
+    @Test
+    public void testGetAssociatedRounds() {
+        
+    }
+    
+    @Test
+    public void testUpdateGame() {
+        
+    }
+    
+    @Test
+    public void testAnswerHiding() {
+        
+    }
+    
+    @Test
+    public void testDeleteGame() {
+        
     }
     
 }
