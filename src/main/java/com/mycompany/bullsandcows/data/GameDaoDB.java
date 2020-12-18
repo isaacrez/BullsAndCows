@@ -91,7 +91,7 @@ public class GameDaoDB implements GameDao {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
  
-    private static final class GameMapper implements RowMapper<Game> {
+    public static final class GameMapper implements RowMapper<Game> {
         @Override
         public Game mapRow(ResultSet rs, int index) throws SQLException {
             Game game = new Game();

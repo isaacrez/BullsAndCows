@@ -16,5 +16,6 @@ CREATE TABLE Round (
 		REFERENCES Games(id),
 	
     guess CHAR(4) NOT NULL,
+    result CHAR(7) NOT NULL,
     `time` DATETIME NOT NULL DEFAULT  NOW()
 );

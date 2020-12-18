@@ -15,6 +15,7 @@ public class Round {
     
     private int id;
     private String guess;
+    private String result;
     private Date time;
     private int gameId;
     
@@ -32,6 +33,14 @@ public class Round {
     
     public String getGuess() {
         return this.guess;
+    }
+    
+    public void setResult(String result) {
+        this.result = result;
+    }
+    
+    public String getResult() {
+        return this.result;
     }
     
     public void setTime(Date time) {
