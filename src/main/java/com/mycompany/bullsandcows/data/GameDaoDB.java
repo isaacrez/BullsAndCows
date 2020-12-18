@@ -123,11 +123,12 @@ public class GameDaoDB implements GameDao {
     }
 
     @Override
+    @Transactional
     public void deleteGameById(int id) {
-        String DELETE_GAME = "DELETE FROM game g " +
-                "INNER JOIN round r " +
-                "ON g.id = r.gameId " +
-                "WHERE g.id = ?; ";
+        String DELETE_ROUND = "DELETE FROM round WHERE gameId = ?";
+        jdbc.update(DELETE_ROUND, id);
+        
+        String DELETE_GAME = "DELETE FROM game WHERE id = ?";
         jdbc.update(DELETE_GAME, id);
     }
  
