@@ -5,6 +5,7 @@
  */
 package com.mycompany.bullsandcows.data;
 
+import com.mycompany.bullsandcows.models.Game;
 import com.mycompany.bullsandcows.models.Round;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -51,10 +52,13 @@ public class RoundDaoDB implements RoundDao {
     @Override
     @Transactional
     public Round addRound(Round round) {
-        String INSERT_ROUND = "INSERT INTO round(gameId, guess) VALUES (?, ?)";
+        round = addRoundResult(round);
+        
+        String INSERT_ROUND = "INSERT INTO round(gameId, guess, result) VALUES (?, ?, ?)";
         jdbc.update(INSERT_ROUND,
                 round.getGameId(),
-                round.getGuess());
+                round.getGuess(),
+                round.getResult());
         
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         round.setId(newId);
@@ -62,6 +66,27 @@ public class RoundDaoDB implements RoundDao {
         Date time = getRoundById(newId).getTime();
         round.setTime(time);
         
+        return round;
+    }
+    
+    private Round addRoundResult(Round round) {
+        int e = 0;
+        int p = 0;
+        
+        String GET_ANSWER = "SELECT * FROM game WHERE id = ?;";
+        Game game = jdbc.queryForObject(GET_ANSWER, new GameDaoDB.GameMapper(), round.getGameId());
+        String answer = game.getAnswer();
+        String guess = round.getGuess();
+        
+        for (int i = 0; i < GET_ANSWER.length(); i++) {
+            if (answer.charAt(i) == guess.charAt(i)) {
+                e++;
+            } else if (answer.contains(guess.substring(i,i))) {
+                p++;
+            }
+        }
+        
+        round.setResult("e:" + e + ":p:" + p);
         return round;
     }
 
