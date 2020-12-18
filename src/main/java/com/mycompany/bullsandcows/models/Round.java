@@ -60,6 +60,11 @@ public class Round {
     }
     
     @Override
+    public String toString() {
+        return "ROUND [" + id + "] | G: " + gameId  + ": " + guess + " | " + result + " | " + time;
+    }
+    
+    @Override
     public int hashCode() {
         return this.id;
     }
@@ -71,8 +76,6 @@ public class Round {
         } else if ((o instanceof Round)) {
             Round round = (Round) o;
             if ((id == round.getId())
-                    && (guess == round.getGuess())
-                    && (time == round.getTime())
                     && (gameId == round.getGameId())) {
                 return true;
             }

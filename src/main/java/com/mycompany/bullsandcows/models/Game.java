@@ -40,6 +40,11 @@ public class Game {
     }
     
     @Override
+    public String toString() {
+        return "GAME [" + id + "]: " + answer + ", Complete: " + finished;
+    }
+    
+    @Override
     public int hashCode() {
         return this.id;
     }
@@ -50,8 +55,14 @@ public class Game {
             return true;
         } else if ((o instanceof Game)) {
             Game game = (Game) o;
-            if (id == game.getId()) {
-                return true;
+            if ((id == game.getId())
+                    && (finished == game.isFinished())) {
+                if (!finished) {
+                    // The answer for game.getAnswer() is obscured; would cause a false negative
+                    return true;
+                } else if (answer.equals(game.getAnswer())) {
+                    return true;
+                }
             }
         }
         
