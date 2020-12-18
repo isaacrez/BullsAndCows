@@ -100,7 +100,7 @@ public class RoundDaoDB implements RoundDao {
     @Override
     public void updateRound(Round round) {
         String UPDATE_ROUND = "UPDATE round SET "
-                + "guess = ? "
+                + "guess = ?, "
                 + "time = ? "
                 + "WHERE id = ? "; 
         jdbc.update(UPDATE_ROUND, round.getGuess(), round.getTime(), round.getId());
