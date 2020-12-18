@@ -13,7 +13,7 @@ CREATE TABLE Round (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     gameId INT,
     FOREIGN KEY fk_Game (gameId)
-		REFERENCES Games(id),
+		REFERENCES Game(id),
 	
     guess CHAR(4) NOT NULL,
     result CHAR(7) NOT NULL,
