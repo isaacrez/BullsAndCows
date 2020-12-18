@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -48,7 +49,7 @@ public class GameDaoDB implements GameDao {
         jdbc.update(INSERT_NEW_GAME, game.isFinished(), game.getAnswer());
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         game.setId(newId);
-        return game;
+        return hideAnswerIfUnfinished(game);
     }
     
     private String generateAnswer() {
@@ -74,12 +75,16 @@ public class GameDaoDB implements GameDao {
 
     @Override
     public Game getGameById(int id) {
-        String GET_GAME_BY_ID = "SELECT * " +
+        try {
+            String GET_GAME_BY_ID = "SELECT * " +
                 "FROM game " +
                 "WHERE id = ?";
         
-        Game game = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
-        return hideAnswerIfUnfinished(game);
+            Game game = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
+            return hideAnswerIfUnfinished(game);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
     
     private Game hideAnswerIfUnfinished(Game game) {
@@ -112,10 +117,13 @@ public class GameDaoDB implements GameDao {
 
     @Override
     public void updateGame(Game game) {
-        String UPDATE_GAME_TO_FINISHED = "UPDATE game " +
-                "SET finished = true " +
+        String UPDATE_GAME = "UPDATE game " +
+                "SET finished = ?, answer = ? " +
                 "WHERE id = ?; ";
-        jdbc.update(UPDATE_GAME_TO_FINISHED, game.getId());
+        jdbc.update(UPDATE_GAME, 
+                game.isFinished(), 
+                game.getAnswer(), 
+                game.getId());
     }
 
     @Override
@@ -127,7 +135,7 @@ public class GameDaoDB implements GameDao {
         String DELETE_GAME = "DELETE FROM game WHERE id = ?";
         jdbc.update(DELETE_GAME, id);
     }
- 
+     
     public static final class GameMapper implements RowMapper<Game> {
         @Override
         public Game mapRow(ResultSet rs, int index) throws SQLException {
