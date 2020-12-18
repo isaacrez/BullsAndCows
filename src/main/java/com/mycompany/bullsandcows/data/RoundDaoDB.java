@@ -27,7 +27,7 @@ public class RoundDaoDB implements RoundDao {
         this.jdbcTemplate = jdbcTemplate;
     }
     
-    private static final class RoundMapper implements RowMapper<Round> {
+    public static final class RoundMapper implements RowMapper<Round> {
         @Override
         public Round mapRow(ResultSet rs, int index) throws SQLException {
             Round round = new Round();
