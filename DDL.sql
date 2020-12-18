@@ -3,7 +3,7 @@ CREATE DATABASE bullsAndCowsDB;
 
 USE bullsAndCowsDB;
 
-CREATE TABLE Games (
+CREATE TABLE Game (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     finished BOOL DEFAULT false,
     answer CHAR(4) NOT NULL

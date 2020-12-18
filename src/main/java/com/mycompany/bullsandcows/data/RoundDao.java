@@ -5,10 +5,17 @@
  */
 package com.mycompany.bullsandcows.data;
 
+import com.mycompany.bullsandcows.models.Round;
+import java.util.List;
+
 /**
  *
  * @author isaacrez
  */
 public interface RoundDao {
-    
+    List<Round> getAllRounds();
+    Round getRoundById(int id);
+    Round addRound(Round round);
+    void updateRound(Round round);
+    void deleteRoundById(int id);
 }

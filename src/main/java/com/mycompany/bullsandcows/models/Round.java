@@ -5,7 +5,7 @@
  */
 package com.mycompany.bullsandcows.models;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
