@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mycompany.bullsandcows.models.Round;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,33 +23,49 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GameDaoDB implements GameDao {
     
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbc;
     
     @Autowired
     public GameDaoDB(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-    
-    private static final class GameMapper implements RowMapper<Game> {
-        @Override
-        public Game mapRow(ResultSet rs, int index) throws SQLException {
-            Game game = new Game();
-            game.setId(rs.getInt("id"));
-            game.setFinished(rs.getBoolean("finished"));
-            game.setAnswer(rs.getString("answer"));
-            return game;
-        }
+        this.jdbc = jdbcTemplate;
     }
 
+    @Override
+    public List<Round> getAllRounds() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Round getRoundById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Round addRound(Round round) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateRound(Round round) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteRoundById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public int totalGuesses(int gameId) throws SQLException {
 //        ToDo: Replace with proper sql aggregation
         String GET_NUMBER_OF_GUESSES = "SELECT * " +
                 "FROM Game g " +
                 "INNER JOIN Round r" +
                 "ON g.GameId = r.GameId AND g.id = ?;";
-        return jdbcTemplate.query(GET_NUMBER_OF_GUESSES, new GameMapper(), gameId).size();
+        return jdbc.query(GET_NUMBER_OF_GUESSES, new GameMapper(), gameId).size();
     }
 
+    @Override
     public String getResult(int roundId) throws SQLException {
         int e = 0;
         int p = 0;
@@ -58,8 +75,8 @@ public class GameDaoDB implements GameDao {
         String GET_ANSWER = "SELECT * " +
                 "FROM Game " +
                 "WHERE id = ?";
-        Round round = jdbcTemplate.queryForObject(GET_GUESS, new RoundDaoDB.RoundMapper(), roundId);
-        Game game = jdbcTemplate.queryForObject(GET_ANSWER, new GameMapper(), round.getGameId());
+        Round round = jdbc.queryForObject(GET_GUESS, new RoundDaoDB.RoundMapper(), roundId);
+        Game game = jdbc.queryForObject(GET_ANSWER, new GameMapper(), round.getGameId());
 
         String answer = game.getAnswer();
         String guess = round.getGuess();
@@ -72,5 +89,16 @@ public class GameDaoDB implements GameDao {
             }
         }
         return "e:" + e + ":p:" + p;
+    }
+ 
+    private static final class GameMapper implements RowMapper<Game> {
+        @Override
+        public Game mapRow(ResultSet rs, int index) throws SQLException {
+            Game game = new Game();
+            game.setId(rs.getInt("id"));
+            game.setFinished(rs.getBoolean("finished"));
+            game.setAnswer(rs.getString("answer"));
+            return game;
+        }
     }
 }
