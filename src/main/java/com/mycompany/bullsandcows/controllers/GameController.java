@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.EntityResponse;
 
 /**
  *
@@ -55,13 +55,17 @@ public class GameController {
     }
     
     @GetMapping("/game/{gameId}")
-    public ResponseEntity getGameById() {
+    public ResponseEntity getGameById(@PathVariable int gameId) {
         // Returns specific game based on Id
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        Game game = gameDao.getGameById(gameId);
+        if (game == null) {
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(game);
     }
     
     @GetMapping("/rounds/{gameId}")
-    public ResponseEntity getRoundsByGameId() {
+    public ResponseEntity getRoundsByGameId(@PathVariable int gameId) {
         // Returns list of rounds for specified game; time sorted
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
