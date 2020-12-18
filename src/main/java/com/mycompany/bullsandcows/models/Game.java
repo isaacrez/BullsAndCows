@@ -50,9 +50,7 @@ public class Game {
             return true;
         } else if ((o instanceof Game)) {
             Game game = (Game) o;
-            if ((id == game.getId())
-                    && (finished = game.isFinished())
-                    && (answer == game.getAnswer())) {
+            if (id == game.getId()) {
                 return true;
             }
         }

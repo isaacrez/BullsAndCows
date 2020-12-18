@@ -127,7 +127,7 @@ public class GameDaoDB implements GameDao {
         String DELETE_GAME = "DELETE FROM game WHERE id = ?";
         jdbc.update(DELETE_GAME, id);
     }
- 
+     
     public static final class GameMapper implements RowMapper<Game> {
         @Override
         public Game mapRow(ResultSet rs, int index) throws SQLException {

@@ -11,6 +11,8 @@ import com.mycompany.bullsandcows.models.Round;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -63,12 +65,22 @@ public class GameDaoDBTest {
     
     @Test
     public void testAddGetGame() {
+        Game game = gameDao.addGame();
+        Game fromDao = gameDao.getGameById(game.getId());
         
+        assertEquals(game, fromDao);
     }
     
     @Test
     public void testGetAllGames() {
+        Game game1 = gameDao.addGame();
+        Game game2 = gameDao.addGame();
         
+        List<Game> games = gameDao.getAllGames();
+        
+        assertEquals(2, games.size());
+        assertTrue(games.contains(game1));
+        assertTrue(games.contains(game2));
     }
     
     @Test
