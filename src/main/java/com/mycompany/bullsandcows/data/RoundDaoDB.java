@@ -66,6 +66,13 @@ public class RoundDaoDB implements RoundDao {
         Date time = getRoundById(newId).getTime();
         round.setTime(time);
         
+        if (round.getResult().equals("e:4:p:0")) {
+            String UPDATE_GAME_TO_FINISHED = "UPDATE game " +
+                "SET finished = true " +
+                "WHERE id = ?; ";
+            jdbc.update(UPDATE_GAME_TO_FINISHED, round.getGameId());
+        }
+        
         return round;
     }
     
@@ -78,10 +85,10 @@ public class RoundDaoDB implements RoundDao {
         String answer = game.getAnswer();
         String guess = round.getGuess();
         
-        for (int i = 0; i < GET_ANSWER.length(); i++) {
+        for (int i = 0; i < 4; i++) {
             if (answer.charAt(i) == guess.charAt(i)) {
                 e++;
-            } else if (answer.contains(guess.substring(i,i))) {
+            } else if (answer.contains(guess.substring(i,i+1))) {
                 p++;
             }
         }
@@ -111,6 +118,7 @@ public class RoundDaoDB implements RoundDao {
             Round round = new Round();
             round.setId(rs.getInt("id"));
             round.setGuess(rs.getString("guess"));
+            round.setResult(rs.getString("result"));
             round.setTime(rs.getDate("time"));
             round.setGameId(rs.getInt("gameId"));
             return round;

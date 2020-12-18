@@ -38,7 +38,7 @@ public class GameController {
         this.gameDao = gameDao;
         this.roundDao = roundDao;
     }
-        
+    
     @PostMapping("/begin")
     public ResponseEntity newGame() {
         Game game = gameDao.addGame();
@@ -74,7 +74,7 @@ public class GameController {
         try {
             return ResponseEntity.ok(gameDao.getAssociatedRounds(gameId));
         } catch (SQLException e) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(null, HttpStatus.NO_CONTENT);
         }
     }
     

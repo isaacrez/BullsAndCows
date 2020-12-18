@@ -36,44 +36,6 @@ public class GameDaoDB implements GameDao {
     }
 
     @Override
-    public List<Round> getAssociatedRounds(int gameId) throws SQLException {
-    // ToDo: Replace with proper sql aggregation
-        String GET_ALL_ROUNDS_FOR_GAME = "SELECT r.id r.gameId r.guess r.result r.time " +
-                "FROM round r " +
-                "INNER JOIN game g" +
-                "ON g.id = r.gameId " +
-                "WHERE g.gameId = ?";
-        return jdbc.query(GET_ALL_ROUNDS_FOR_GAME, new RoundMapper(), gameId);
-    }
-
-    @Override
-    public List<Game> getAllGames() {
-        String GET_ALL_GAMES = "SELECT * " +
-                "FROM game";
-        return jdbc.query(GET_ALL_GAMES, new GameMapper());
-    }
-
-    @Override
-    public Game getGameById(int id) {
-        String GET_GAME_BY_ID = "SELECT * " +
-                "FROM game " +
-                "WHERE id = ?";
-        
-        Game game = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
-        return hideAnswerIfUnfinished(game);
-    }
-    
-    private Game hideAnswerIfUnfinished(Game game) {
-        if (game == null) {
-            return null;
-        } else if (!game.isFinished()) {
-            game.setAnswer("****");
-        }
-        
-        return game;
-    }
-
-    @Override
     @Transactional
     public Game addGame() {
         Game game = new Game();
@@ -102,6 +64,50 @@ public class GameDaoDB implements GameDao {
         }
         
         return ansString;
+    }
+    
+    @Override
+    public List<Game> getAllGames() {
+        String GET_ALL_GAMES = "SELECT * FROM game";
+        return hideAnswerIfUnfinished(jdbc.query(GET_ALL_GAMES, new GameMapper()));
+    }
+
+    @Override
+    public Game getGameById(int id) {
+        String GET_GAME_BY_ID = "SELECT * " +
+                "FROM game " +
+                "WHERE id = ?";
+        
+        Game game = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
+        return hideAnswerIfUnfinished(game);
+    }
+    
+    private Game hideAnswerIfUnfinished(Game game) {
+        if (game == null) {
+            return null;
+        } else if (!game.isFinished()) {
+            game.setAnswer("****");
+        }
+        
+        return game;
+    }
+    
+    private List<Game> hideAnswerIfUnfinished(List<Game> games) {
+        List<Game> updatedGames = new ArrayList<>();
+        for (Game game : games) {
+            updatedGames.add(hideAnswerIfUnfinished(game));
+        }
+        return updatedGames;
+    }
+    
+    @Override
+    public List<Round> getAssociatedRounds(int gameId) throws SQLException {
+        String GET_ALL_ROUNDS_FOR_GAME = "SELECT r.id, r.gameId, r.guess, r.result, r.time " +
+                "FROM round AS r " +
+                "INNER JOIN game AS g " +
+                "ON g.id = r.gameId " +
+                "WHERE g.id = ?";
+        return jdbc.query(GET_ALL_ROUNDS_FOR_GAME, new RoundMapper(), gameId);
     }
 
     @Override
