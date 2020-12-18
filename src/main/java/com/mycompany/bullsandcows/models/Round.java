@@ -59,4 +59,25 @@ public class Round {
         return this.gameId;
     }
     
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if ((o instanceof Round)) {
+            Round round = (Round) o;
+            if ((id == round.getId())
+                    && (guess == round.getGuess())
+                    && (time == round.getTime())
+                    && (gameId == round.getGameId())) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

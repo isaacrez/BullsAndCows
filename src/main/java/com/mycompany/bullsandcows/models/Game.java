@@ -39,4 +39,26 @@ public class Game {
         return this.answer;
     }
     
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if ((o instanceof Game)) {
+            Game game = (Game) o;
+            if ((id == game.getId())
+                    && (finished = game.isFinished())
+                    && (answer == game.getAnswer())) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    
 }
