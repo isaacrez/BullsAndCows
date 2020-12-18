@@ -65,11 +65,9 @@ public class GameDaoDB implements GameDao {
         String guess = round.getGuess();
 
         for (int i = 0; i < GET_ANSWER.length(); i++) {
-            //doesnt account for multiple occurrences in guess with one occurrence in answer
-            char currChar = guess.charAt(i);
-            if (answer.charAt(i) == currChar) {
+            if (answer.charAt(i) == guess.charAt(i)) {
                 e++;
-            } else if (answer.contains(currChar)) {
+            } else if (answer.contains(guess.substring(i,i))) {
                 p++;
             }
         }
