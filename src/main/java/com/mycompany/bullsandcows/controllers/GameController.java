@@ -9,6 +9,7 @@ import com.mycompany.bullsandcows.data.GameDao;
 import com.mycompany.bullsandcows.data.RoundDao;
 import com.mycompany.bullsandcows.models.Game;
 import com.mycompany.bullsandcows.models.Round;
+import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,8 @@ public class GameController {
         
     @PostMapping("/begin")
     public ResponseEntity newGame() {
-        // Returns 201 CREATED and created gameId
-        return new ResponseEntity(HttpStatus.CREATED);
+        Game game = gameDao.addGame();
+        return new ResponseEntity(game.getId(), HttpStatus.CREATED);
     }
     
     @PostMapping("/guess")
@@ -54,9 +55,13 @@ public class GameController {
         return ResponseEntity.ok(round);
     }
     
+    @GetMapping("/game")
+    public ResponseEntity getGames() {
+        return ResponseEntity.ok(gameDao.getAllGames());
+    }
+    
     @GetMapping("/game/{gameId}")
     public ResponseEntity getGameById(@PathVariable int gameId) {
-        // Returns specific game based on Id
         Game game = gameDao.getGameById(gameId);
         if (game == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -66,8 +71,11 @@ public class GameController {
     
     @GetMapping("/rounds/{gameId}")
     public ResponseEntity getRoundsByGameId(@PathVariable int gameId) {
-        // Returns list of rounds for specified game; time sorted
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        try {
+            return ResponseEntity.ok(gameDao.getAssociatedRounds(gameId));
+        } catch (SQLException e) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
     }
     
 }

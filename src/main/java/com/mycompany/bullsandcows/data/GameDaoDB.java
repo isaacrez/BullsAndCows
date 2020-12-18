@@ -5,6 +5,7 @@
  */
 package com.mycompany.bullsandcows.data;
 
+import com.mycompany.bullsandcows.data.RoundDaoDB.RoundMapper;
 import com.mycompany.bullsandcows.models.Game;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,13 +36,14 @@ public class GameDaoDB implements GameDao {
     }
 
     @Override
-    public int totalGuesses(int gameId) throws SQLException {
-//        ToDo: Replace with proper sql aggregation
-        String GET_NUMBER_OF_GUESSES = "SELECT * " +
-                "FROM game g " +
-                "INNER JOIN round r" +
-                "ON g.gameId = r.gameId AND g.id = ?;";
-        return jdbc.query(GET_NUMBER_OF_GUESSES, new GameMapper(), gameId).size();
+    public List<Round> getAssociatedRounds(int gameId) throws SQLException {
+    // ToDo: Replace with proper sql aggregation
+        String GET_ALL_ROUNDS_FOR_GAME = "SELECT r.id r.gameId r.guess r.result r.time " +
+                "FROM round r " +
+                "INNER JOIN game g" +
+                "ON g.id = r.gameId " +
+                "WHERE g.gameId = ?";
+        return jdbc.query(GET_ALL_ROUNDS_FOR_GAME, new RoundMapper(), gameId);
     }
 
     @Override
@@ -73,12 +75,15 @@ public class GameDaoDB implements GameDao {
 
     @Override
     @Transactional
-    public Game addGame(Game game) {
+    public Game addGame() {
+        Game game = new Game();
+        game.setAnswer(generateAnswer());
+        game.setFinished(false);
+
         String INSERT_NEW_GAME = "INSERT INTO game (finished, answer) " +
                 "VALUES(?, ?);";
         
-        game.setAnswer(generateAnswer());
-        jdbc.update(INSERT_NEW_GAME, false, game.getAnswer());
+        jdbc.update(INSERT_NEW_GAME, game.isFinished(), game.getAnswer());
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         game.setId(newId);
         return game;
