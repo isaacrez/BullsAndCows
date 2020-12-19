@@ -113,6 +113,58 @@ public class RoundDaoDBTest {
     }
     
     @Test
+    public void testRoundResults() {
+        Game game = gameDao.addGame();
+        game.setAnswer("1234");
+        gameDao.updateGame(game);
+        
+        Round oneExact = new Round();
+        oneExact.setGuess("1567");
+        oneExact.setGameId(game.getId());
+        oneExact = roundDao.addRound(oneExact);
+        game = gameDao.getGameById(game.getId());
+        
+        assertEquals(oneExact.getResult(), "e:1:p:0");
+        assertFalse(game.isFinished());
+        
+        Round onePartial = new Round();
+        onePartial.setGuess("5671");
+        onePartial.setGameId(game.getId());
+        onePartial = roundDao.addRound(onePartial);
+        game = gameDao.getGameById(game.getId());
+        
+        assertEquals(onePartial.getResult(), "e:0:p:1");
+        assertFalse(game.isFinished());
+        
+        Round oneExactOnePartial = new Round();
+        oneExactOnePartial.setGuess("1456");
+        oneExactOnePartial.setGameId(game.getId());
+        oneExactOnePartial = roundDao.addRound(oneExactOnePartial);        
+        game = gameDao.getGameById(game.getId());
+        
+        assertEquals(oneExactOnePartial.getResult(), "e:1:p:1");
+        assertFalse(game.isFinished());
+        
+        Round allPartial = new Round();
+        allPartial.setGuess("4321");
+        allPartial.setGameId(game.getId());
+        allPartial = roundDao.addRound(allPartial);
+        game = gameDao.getGameById(game.getId());
+        
+        assertEquals(allPartial.getResult(), "e:0:p:4");
+        assertFalse(game.isFinished());
+        
+        Round allExact = new Round();
+        allExact.setGuess("1234");
+        allExact.setGameId(game.getId());
+        allExact = roundDao.addRound(allExact);
+        game = gameDao.getGameById(game.getId());
+        
+        assertEquals(allExact.getResult(), "e:4:p:0");
+        assertTrue(game.isFinished());
+    }
+    
+    @Test
     public void testDeleteRound() {
         Game game = gameDao.addGame();
         Round round = new Round();
