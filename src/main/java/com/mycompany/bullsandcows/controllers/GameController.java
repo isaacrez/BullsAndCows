@@ -69,5 +69,6 @@ public class GameController {
         // Returns list of rounds for specified game; time sorted
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-    
+
+    public void addActionListener(ActionListener a){}
 }
