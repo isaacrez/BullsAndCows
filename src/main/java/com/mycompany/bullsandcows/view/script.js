@@ -1,8 +1,7 @@
 $(document).ready(function () {
     $("#new").on("click", function () {
         $.ajax({
-                type: 'GET',
-                url: '/begin',
+                url: './GameController.java',
                 success: function(response) {
                     console.log(response)
                     $("#history").text(`<div class="grid-item">Guess:</div>
@@ -10,7 +9,7 @@ $(document).ready(function () {
                                         <div class="grid-item">Exact:</div>`)
                 },
                 error: function() {
-                    console.log("Error, didnt run api req")
+                    console.log("Error, didn't run api req")
                 }
             })
     })
@@ -23,8 +22,8 @@ $(document).ready(function () {
         if(guess.length == 4 && guess.match(/^[0-9]+$/)) {
             $("#error").text("")
              $.ajax({
-                        type: 'POST',
-                        url: '/guess',
+                        type: 'GET',
+                        url: './GameController.java',
                         success: function(response) {
                             $("#exact-result").text("")
                             $("#partial-result").text("")
@@ -57,7 +56,4 @@ $(document).ready(function () {
         }
     });
 });
-
-//Make table of previous guesses
 //Make call for is finished to alert you have guessed correctly
-//Show history
