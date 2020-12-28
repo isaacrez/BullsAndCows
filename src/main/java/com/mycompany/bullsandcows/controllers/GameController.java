@@ -13,12 +13,7 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -39,12 +34,14 @@ public class GameController {
         this.roundDao = roundDao;
     }
 
+    @CrossOrigin
     @PostMapping("/begin")
     public ResponseEntity newGame() {
         Game game = gameDao.addGame();
         return new ResponseEntity(game.getId(), HttpStatus.CREATED);
     }
 
+    @CrossOrigin
     @PostMapping("/guess")
     public ResponseEntity makeGuess(@RequestBody Round round) {
         Game game = gameDao.getGameById(round.getGameId());
@@ -55,11 +52,13 @@ public class GameController {
         return ResponseEntity.ok(round);
     }
 
+    @CrossOrigin
     @GetMapping("/game")
     public ResponseEntity getGames() {
         return ResponseEntity.ok(gameDao.getAllGames());
     }
 
+    @CrossOrigin
     @GetMapping("/game/{gameId}")
     public ResponseEntity getGameById(@PathVariable int gameId) {
         Game game = gameDao.getGameById(gameId);
@@ -69,6 +68,7 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+    @CrossOrigin
     @GetMapping("/rounds/{gameId}")
     public ResponseEntity getRoundsByGameId(@PathVariable int gameId) {
         try {
