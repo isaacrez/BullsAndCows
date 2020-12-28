@@ -27,24 +27,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class GameController {
-    
+
     @Autowired
     private final GameDao gameDao;
-    
+
     @Autowired
     private final RoundDao roundDao;
-    
+
     public GameController(GameDao gameDao, RoundDao roundDao) {
         this.gameDao = gameDao;
         this.roundDao = roundDao;
     }
-    
+
     @PostMapping("/begin")
     public ResponseEntity newGame() {
         Game game = gameDao.addGame();
         return new ResponseEntity(game.getId(), HttpStatus.CREATED);
     }
-    
+
     @PostMapping("/guess")
     public ResponseEntity makeGuess(@RequestBody Round round) {
         Game game = gameDao.getGameById(round.getGameId());
@@ -54,12 +54,12 @@ public class GameController {
         round = roundDao.addRound(round);
         return ResponseEntity.ok(round);
     }
-    
+
     @GetMapping("/game")
     public ResponseEntity getGames() {
         return ResponseEntity.ok(gameDao.getAllGames());
     }
-    
+
     @GetMapping("/game/{gameId}")
     public ResponseEntity getGameById(@PathVariable int gameId) {
         Game game = gameDao.getGameById(gameId);
@@ -68,7 +68,7 @@ public class GameController {
         }
         return ResponseEntity.ok(game);
     }
-    
+
     @GetMapping("/rounds/{gameId}")
     public ResponseEntity getRoundsByGameId(@PathVariable int gameId) {
         try {
@@ -77,6 +77,4 @@ public class GameController {
             return new ResponseEntity(null, HttpStatus.NO_CONTENT);
         }
     }
-
-    public void addActionListener(ActionListener a){}
 }
