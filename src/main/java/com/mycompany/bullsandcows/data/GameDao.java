@@ -1,6 +1,7 @@
 package com.mycompany.bullsandcows.data;
 
 import com.mycompany.bullsandcows.models.Game;
+import com.mycompany.bullsandcows.models.Round;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,9 +18,8 @@ import java.util.List;
 public interface GameDao {
     List<Game> getAllGames();
     Game getGameById(int id);
-    Game addGame(Game game);
+    Game addGame();
     void updateGame(Game game);
     void deleteGameById(int id);
-    
-    public int totalGuesses(int gameId) throws SQLException;
+    List<Round> getAssociatedRounds(int gameId) throws SQLException;
 }
