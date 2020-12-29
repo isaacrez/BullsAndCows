@@ -50,6 +50,8 @@ public class GameController {
         Game game = gameDao.getGameById(round.getGameId());
         if (game == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        } else if (game.isFinished()) {
+            return ResponseEntity.ok("Game is already finished!");
         }
         round = roundDao.addRound(round);
         return ResponseEntity.ok(round);
