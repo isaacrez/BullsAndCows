@@ -5,8 +5,8 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'http://localhost:8080/api/begin',
                 success: function (response) {
-                    console.log("game #" + response + "created")
-                    $("#gameId").val(response)},
+                    console.log("game #" + response + " created")
+                    $("#gameId").text(`Game #${response}`)},
                 error: function() {
                     console.log("Error, didn't run api req")
                 }
@@ -14,64 +14,44 @@ $(document).ready(function () {
     })
 
     $("#enter").on("click", function () {
+        event.preventDefault();
+        if ($("#gameId").text() == "No game selected") {
+            alert("You must start a game before you can guess a number. Select the start game button in the upper right corner to begin.")
+        }
+        else {
+            var guessInput = $("#input").val();
+            var gameId = $("#gameId").text().split("#")[1]
 
-        var guessInput = $("#1").val() +
-                          $("#2").val() +
-                          $("#3").val() +
-                          $("#4").val();
-
-        if(guessInput.length == 4 && guessInput.match(/^[0-9]+$/)) {
-             $("#error").text("")
-             $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8080/api/guess',
-                contentType : "application/json",
-                data: JSON.stringify({"gameId" : $("#gameId").val(),
-                                      "guess" : guessInput}),
-                success: function(response) {
-                let exact = response.result.charAt(2)
-                let partial  = response.result.charAt(6)
-                    $("#exact-result").text(exact)
-                    $("#partial-result").text(partial)
-
-                    $("#history").append(`<div class="grid-item l">${response.guess}</div>
+            if(guessInput.length == 4 && guessInput.match(/^[0-9]+$/)) {
+                 $("#error").text("")
+                 $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/api/guess',
+                    contentType : "application/json",
+                    data: JSON.stringify({"gameId" : gameId,
+                                          "guess" : guessInput}),
+                    success: function(response) {
+                    console.log(response);
+                    let exact = response.result.charAt(2)
+                    let partial  = response.result.charAt(6)
+                    $("#history").prepend(`<div class="grid-item l">${response.guess}</div>
                                             <div class="grid-item l">${exact}</div>
                                             <div class="grid-item l">${partial}</div>`)
-                    console.log(response)
-                },
-                error: function() {
-                    console.log("Error, didn't run api req")
-                }
-            })
+                    if (exact == "4") {
+                        alert(`Congrats! You have solved this game, the correct answer was ${guessInput}`)
+                        $("#error").text("Correct!")
+                        $("#error").css("color", "#FF304f")
+                    }
+                    },
+                    error: function() {
+                        console.log("Error, didn't run api req")
+                    }
+                })
+            }
+            else {
+                $("#error").text("Invalid entry. All values must be numbers.")
+            }
+            $("#input").val("");
         }
     });
-    $("#1").val("")
-    $("#2").val("")
-    $("#3").val("")
-    $("#4").val("");
 });
-
-//function () {}
-//Make call for is finished to alert you have guessed correctly
-
-//
-//                            if (e = 4) {
-//                                $.ajax({
-//                                    type: 'GET',
-//                                    url: 'http://localhost:8080/api/guess/',
-//                                    success: function(response) {
-//                                        $("#exact-result").text("");
-//                                        $("#partial-result").text("");
-//                                        let matches = response.result.split(":");
-//                                        $("#data").append(`<div class="grid-item">${result.guess}</div>
-//                                              <div class="grid-item">${matches[1]}</div>
-//                                              <div class="grid-item">${matches[3]}</div>`)
-//                                    },
-//                                    error: function() {
-//                                        console.log("Error, didnt run api req")
-//                                    }
-//                                })
-//                            }
-//                            else {
-//                                        $("#error").text("Invalid entry. All values must be numbers.")
-//                            }

@@ -1,88 +1,35 @@
-
 body {
 	color: white;
-	background-color: rgb(20, 20, 20);
+	background-color: #0E2F56;
+	font-family: nazare, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16pt;
 }
 
-#body {
-	margin: 15vh auto;
-	padding: 2vh 2vw;
-	width: 450px;
-	background-color: black;
-
-	border-radius: 30px;
-}
-
-h1 {
+h1, h2 {
 	text-align: center;
-	color: red;
-}
-
-h2, h3, p {
-	text-align: center;
-	color: orange;
-}
-
-h1, h2, h3 {
+	color: #118DF0;
 	font-weight: bold;
 	font-size: 30pt;
 	margin-bottom: 10px;
 }
 
-p {
-	font-size: 16pt;
-}
-
-button {
-	margin: 10px 10px;
-	padding: 10px;
-
-	border: 10px solid;
-	border-image-slice: 1;
-	border-width: 3px;
-	border-image-source: linear-gradient(to left, red, orange);
-
-	font-size: 20pt;
-	color: orange;
-}
-
-button:hover {
-	background-color: rgba(255, 255, 255, 0.35);
-}
-
-form {
-	display: flex;
-	justify-content: space-evenly;
-	margin: 0 auto;
+h2 {
+    font-size : 28px;
 }
 
 input {
-	background-color: rgb(20, 20, 20);
+	background-color: #0E2F56;
 	border-radius: 10px;
-	width: 75px;
-	height: 75px;
-
+	width: 140px;
+	height: 60px;
 	padding: auto 10px;
-}
-
-.section {
-	margin: 25px 0px;
-}
-
-.center {
-	display: flex;
-	justify-content: center;
-}
-
-.two-column {
-	display: grid;
-	width: 50%;
-	margin: 0 auto;
-	grid-template-columns: auto auto;
+	text-align: center;
 }
 
 #error {
-    color:white;
+    color:black;
 }
 
 .grid-container {
@@ -90,8 +37,74 @@ input {
   grid-template-columns: auto auto auto;
 }
 .grid-item {
-  background-color: rgb(255,165,0,0.2);
   padding: 10px;
-  font-size: 24px;
+  font-size: 20px;
   text-align: center;
+  height: 40px;
+}
+
+.l {
+font-size: 14px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+.row {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #ECECDA;
+    border-radius: 20px;
+    width: 50%;
+    padding: 20px;
+}
+
+.btn {
+    background-color : #FF304F;
+    color: white;
+}
+
+#history {
+    height: 300px;
+    overflow:auto;
+    background-color: #FF304F;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#all, #new {
+    color : #0E2F56;
+    font-size: 16px;
+}
+
+#all {
+    margin-right: 0px;
+}
+
+#gameId {
+    text-align : center;
+    color: #0E2F56;
+    font-size: 18px;
+}
+
+#historyTitle {
+    background-color: #FF304F;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#moveRight {
+    text-align: right;
+}
+
+#enter, #input {
+    display: block;
+    margin-top : 40px
 }

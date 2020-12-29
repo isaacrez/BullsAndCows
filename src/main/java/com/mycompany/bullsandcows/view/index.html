@@ -1,61 +1,42 @@
 <html>
 <head>
 	<title>Bulls 'n Cows!</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.typekit.net/rlr3jft.css">
 	<link rel="stylesheet" href="reset.css">
 	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-	<div id="body">
-		<div class="section">
-			<h1>Bulls 'n Cows!</h1>
-			<div class="center">
-				<button id = "new">New Game</button>
-			</div>
-		</div>
-
-		<div class="section">
-			<h2>Guess</h2>
-			<form action="">
-				<input id = "gameId" type="hidden">
-				<input type="text" maxlength="1" id="1" val = "1">
-				<input type="text" maxlength="1" id="2" val = "1">
-				<input type="text" maxlength="1" id="3" val = "1">
-				<input type="text" maxlength="1" id="4" val = "1">
+	<div class = "row center">
+		<div class = "col-md-6">
+			<button id = "new">< New Game</button>
+			<h1>Guess the Number</h1>
+			<form class = "center" action="">
+				<input id = "input" class = "center" type="text" maxlength="4">
+				<button id = "enter" class="btn center" >Enter</button>
+				<p id = "error"></p>
 			</form>
-			<p id = "error"></p>
-			<div class="center">
-				<button id = "enter">Enter Guess</button>
-			</div>
 		</div>
-
-		<div class="section">
-			<h2>Matches</h2>
-			<div class="two-column">
-				<p>Exact:</p>
-				<p id="exact-result">3</p>
-
-				<p>Partial:</p>
-				<p id="partial-result">4</p>
+		<div class = "col-md-6">
+			<div id = "moveRight">
+				<button id = "all">All Games ></button>
 			</div>
-		</div>
-		<div class="section">
-			<h3>History</h3>
+			<h2>History</h2>
+			<p id = "gameId">No game selected</p>
+			<div class="grid-container" id = "historyTitle">
+				<div class="grid-item">Guess</div>
+				<div class="grid-item">Partial</div>
+				<div class="grid-item">Exact</div>
+			</div>
 			<div class="grid-container" id = "history">
-				<div class="grid-item">Guess:</div>
-				<div class="grid-item">Partial:</div>
-				<div class="grid-item">Exact:</div>
-<!--				<div id = "data"></div>-->
 			</div>
 		</div>
 	</div>
 
 
-	<script
-			src="https://code.jquery.com/jquery-3.5.1.js"
-			integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-			crossorigin="anonymous"></script>
-
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
 	<script src = "./script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
 </html>
